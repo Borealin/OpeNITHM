@@ -20,10 +20,10 @@
 
 #include <FastLED.h>
 
-#define AIR_LED_DELAY 165
-#define AIR_INPUT_DETECTION 0.65
-#define AIR_INPUT_THRESHOLD 0.25
-#define CALIBRATION_FLAG 0xF6
+#define AIR_LED_DELAY 130
+#define AIR_INPUT_DETECTION 0.90
+#define CALIBRATION_SAMPLES 200
+#define SKIP_SAMPLES 40
 
 #ifndef KEY_DIVIDERS
 extern CRGB leds[16];
@@ -33,33 +33,24 @@ extern CRGB leds[31];
 
 extern AutoTouchboard *touchboard;
 
-class AirSensor
-{
+class AirSensor {
   private:
+    int calibrationCounter;
+    bool calibrated;
+    uint16_t thresholds[6];
+    uint16_t maxReadings[6];
+    
     void changeLight(int light);
     void turnOffLight();
-    void setHalfLEDs(CRGB color, int side);
-
-    uint16_t thresholds[6];
-    int samplesToAcquire;
-    int samplesToSkip;
-
-    bool calibrated[6];
-    bool digitalMode;
     
   public:
-    AirSensor(int requiredSamples, int skippedSamples);
-    void loadConfig();
-    void saveConfig();
+    AirSensor();
     void analogCalibrate();
-    bool isCalibrated();
-    bool isDigital();
+    bool isCalibrated() { return calibrated; }
     bool getSensorState(int sensor);
     uint16_t getValue(int sensor);
     float getHandPosition();
     uint8_t getSensorReadings();
-    bool getSensorCalibrated(int i);
-    void recalibrate();
 };
 
 

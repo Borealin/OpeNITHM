@@ -16,10 +16,8 @@
 
 #include <FastLED.h>
 
-#define CALIBRATION_SAMPLES 80
-#define CALIBRATION_DETECTION_THRESHOLD 6
-#define CALIBRATION_FLAG 0xA2
-#define TOUCH_INPUT_THRESHOLD 0.85
+// for hit detection, we keep a running record of the last X number
+// of arrow readings and the deltas from their last readings
 
 #ifndef KEY_DIVIDERS
 extern CRGB leds[16];
@@ -27,21 +25,36 @@ extern CRGB leds[16];
 extern CRGB leds[31];
 #endif
 
-class AutoTouchboard
-{
+class AutoTouchboard {
   private:
+    // these will be tunable / need to be experimented with
+#if NUM_SENSORS == 32
+    int deltaThreshold = 5;
+    double releaseThreshold = 0.8;
+#else
+    int deltaThreshold = 15;
+    double releaseThreshold = 0.8;
+#endif
+    
+    int calibrationCounter;
+    bool calibrated;
     uint16_t key_values[NUM_SENSORS];
-    uint16_t single_thresholds[NUM_SENSORS];
-    uint16_t double_thresholds[NUM_SENSORS];
+    KeyState states[NUM_SENSORS];
+    int triggerThresholdsSingle[NUM_SENSORS];
+    int releaseThresholdsSingle[NUM_SENSORS];
+    int triggerThresholdsDouble[NUM_SENSORS];
+    int releaseThresholdsDouble[NUM_SENSORS];
+    
+    void calcThresholds(int key, int pressure);
 
   public:
     AutoTouchboard();
     void scan();
-    void loadConfig();
-    void saveConfig();
     KeyState update(int key);
     uint16_t getRawValue(int key);
-    void calibrateKeys(bool forceCalibrate = false);
+    uint16_t getReleaseThresholdSingle(int key);
+    void calibrateKeys();
+    bool isCalibrated() { return calibrated; }
 };
 
 #endif

@@ -43,10 +43,10 @@ void SerialProcessor::processConfigCommand(uint8_t* buf)
       serialLeds->saveLights();
       break;
     case CMD_CALIBRATE_SLIDER:
-      touchboard->calibrateKeys(true);
+      touchboard->calibrateKeys();
       break;
     case CMD_CALIBRATE_AIR_SENSORS:
-      sensor->recalibrate();
+      sensor->analogCalibrate();
     case CMD_FACTORY_RESET:
       // clear EEPROM and then reset the controller
       for (int i = 0 ; i < EEPROM.length() ; i++) 

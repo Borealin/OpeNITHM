@@ -11,8 +11,9 @@
 // the pinout and configurations for OPENITHM_V1_1
 // #define OPENITHM_V1_0   // Version 1.0 (No version number on board)
 // #define OPENITHM_V1_1   // Version 1.1 (v1.1 on board under logo)
-#define OPENITHM_V2_0   // Version 2.0 (v2.0 in upper left of board)
+// #define OPENITHM_V2_0   // Version 2.0 (v2.0 in upper left of board)
 // #define OPENITHM_V2_1   // Version 2.1 (v2.1 in upper left of board)
+// #define OPENITHM_FULL_V1_0 // Version 1.0 of the fully integrated board with touch sensors
 
 // Uncomment this line if your IR sensors will be used in analog mode
 // ** OPENITHM_V1_1 AND ABOVE SHOULD ENABLE THIS OPTION **
@@ -41,13 +42,16 @@
 // *** FOR CALIBRATING AND DEBUGGING
 
 // Uncomment this line to output the touch values to the Serial port (for use with Arduino's Serial Plotter)
-//#define SERIAL_PLOT
+// #define SERIAL_KEY_PLOT
 
 // Uncomment this line if you want RAW touch values (vs. normalized)
-//#define SERIAL_RAW_VALUE
+// #define SERIAL_RAW_VALUES
 
 // Define PLOT_PIN as -1 to print all key's values, otherwise define as 0-15 for an individual key
 #define PLOT_PIN -1
+
+// Uncomment this line to output the air sensor values to the Serial port
+// #define SERIAL_AIR_READINGS
 
 // Uncomment this if you wish to ignore a falsely calibrated air sensor
 // #define IGNORE_AIR_CALIBRATION
@@ -68,14 +72,14 @@
 #define USB
 
 // Spit out errors for board definitions
-#if (defined(OPENITHM_V1_0) + defined(OPENITHM_V1_1) + defined(OPENITHM_V2_0) + defined(OPENITHM_V2_1)) == 0
+#if (defined(OPENITHM_V1_0) + defined(OPENITHM_V1_1) + defined(OPENITHM_V2_0) + defined(OPENITHM_V2_1) + defined(OPENITHM_FULL_V1_0)) == 0
 #error "Must define ONE Teensy board in Config.h"
-#elif (defined(OPENITHM_V1_0) + defined(OPENITHM_V1_1) + defined(OPENITHM_V2_0) + defined(OPENITHM_V2_1)) > 1
+#elif (defined(OPENITHM_V1_0) + defined(OPENITHM_V1_1) + defined(OPENITHM_V2_0) + defined(OPENITHM_V2_1) + defined(OPENITHM_FULL_V1_0)) > 1
 #error "Cannot define multiple Teensy boards in Config.h"
 #endif
 #endif
 
-#if (defined(OPENITHM_V2_0) || defined(OPENITHM_V2_1))
+#if (defined(OPENITHM_V2_0) || defined(OPENITHM_V2_1) || defined(OPENITHM_FULL_V1_0))
 #define NUM_SENSORS  32
 #else
 #define NUM_SENSORS  16
